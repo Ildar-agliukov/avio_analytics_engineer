@@ -1,10 +1,7 @@
 import os
 from json import dumps
-from kafka import KafkaProducer
 import requests
-from opensky_api import OpenSkyApi
-api = OpenSkyApi()
-g = api.get_states()
+from kafka import KafkaProducer
 
 
 producer = KafkaProducer(bootstrap_servers=[os.environ['KAFKA_PORT']],
