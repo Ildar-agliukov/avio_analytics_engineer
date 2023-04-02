@@ -1,4 +1,26 @@
 import os
+from json import dumps
+from kafka import KafkaProducer
+import requests
+from opensky_api import OpenSkyApi
+api = OpenSkyApi()
+g = api.get_states()
+
+
+producer = KafkaProducer(bootstrap_servers=[os.environ['KAFKA_PORT']],
+                         key_serializer=lambda x: dumps(x).encode('utf-8'),
+                         value_serializer=lambda x: dumps(x).encode('utf-8'))
+
+def get_opensky_states() -> dict:
+    """Get all states from OpenSky Network API"""
+    path = 'https://opensky-network.org/api/states/all'
+    request = requests.get(path, timeout=60).json()
+    return request['states']
+
+def send_to_kafka(states: dict) -> None:
+    """Send states to Kafka"""
+    producer.send('opensky', key='all_opensky_states', value=states)
 
 if __name__ == '__main__':
-    print(os.environ['KAFKA_PORT'])
+    states: dict = get_opensky_states()
+    send_to_kafka(states=states)
