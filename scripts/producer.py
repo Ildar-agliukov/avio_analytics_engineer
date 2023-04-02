@@ -21,3 +21,4 @@ def send_to_kafka(states: dict) -> None:
 if __name__ == '__main__':
     states: dict = get_opensky_states()
     send_to_kafka(states=states)
+    print('Sent all states to Kafka')
