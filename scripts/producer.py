@@ -4,7 +4,7 @@ import requests
 from kafka import KafkaProducer
 
 
-producer = KafkaProducer(bootstrap_servers=[os.environ['KAFKA_PORT']],
+producer = KafkaProducer(bootstrap_servers=[os.environ['KAFKA_HOST']],
                          key_serializer=lambda x: dumps(x).encode('utf-8'),
                          value_serializer=lambda x: dumps(x).encode('utf-8'))
 
